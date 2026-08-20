@@ -5,14 +5,6 @@ This is an automated, containerized data engineering pipeline that ingests real-
 ## System Architecture
 The pipeline is orchestrated across three distinct relational/file layers using a scheduled cron execution cycle to ensure transactional reliability and analytical speed.
 
-graph LR
-    API[OpenSky API] -->|Requests| Airflow[Apache Airflow / Docker]
-    Airflow -->|Raw JSON to CSV| Bronze[Bronze Layer: Raw Files]
-    Bronze -->|Clean & Filter| Silver[Silver Layer: Enriched CSV]
-    Silver -->|Aggregate Data| Gold[Gold Layer: Business Reporting]
-    Gold -->|On-Premises Data Gateway| PowerBI[Power BI Live Dashboard]
-
-
    1. Ingestion (API): Airflow queries the OpenSky live API via Python every 30 minutes.
    2. Bronze Layer (Raw): Captures raw payload attributes and flattens JSON structures directly into structural, daily raw CSV files.
    3. Silver Layer (Cleaned): Cleans column schemas, filters out anomalous state vectors, and selects targeted performance dimensions (icao24, origin_country, velocity, geo_altitude).
